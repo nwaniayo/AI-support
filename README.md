@@ -10,7 +10,7 @@ This project is a chat support application built using Next.js and Material-UI. 
 
 ## Technologies Used
 - **Next.js**: A React framework for server-side rendering and static site generation.
-- **Material-UI**: A popular React UI framework for building responsive applications.
+- **shadcn**: A popular React UI framework for building responsive applications.
 - **Google Generative AI**: For generating intelligent responses.
 
 ## Installation
