@@ -7,7 +7,7 @@ import { ScrollArea } from "./components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 import { Card, CardContent, CardFooter } from "./components/ui/card";
 import { Moon, Sun, Send, MessageSquare } from 'lucide-react';
-import { callFastAPI } from './api/fastApi';
+import { callApi } from './api/callApi';
 
 export default function CustomerSupport() {
   const [query, setQuery] = useState('');
@@ -56,7 +56,7 @@ export default function CustomerSupport() {
     setResponse('');
     try {
       let apiResponse = '';
-      await callFastAPI(query, (chunk) => {
+      await callApi(query, (chunk) => {
         apiResponse += chunk;
         setResponse(prev => prev + chunk);
       });
