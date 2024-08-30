@@ -34,14 +34,14 @@ async function getPineconeClient() {
 async function getPineconeIndex() {
   if (!pineconeIndex) {
     const client = await getPineconeClient();
-    pineconeIndex = client.index("rag");
+    pineconeIndex = client.index("json");
   }
   return pineconeIndex;
 }
 
 async function queryPinecone(embedding) {
   const pineconeIndex = await getPineconeIndex();
-  const queryResponse = await pineconeIndex.namespace('pdf-documents').query({
+  const queryResponse = await pineconeIndex.namespace('json-documents').query({
     vector: embedding,
     topK: 2,
     includeMetadata: true,
@@ -66,10 +66,19 @@ async function generateEmbedding(query) {
 
 async function generateOpenRouterResponse(augmentedQuery) {
   console.log("Sending augmented query to AI:", augmentedQuery);
-  const systemPrompt = `You are a highly knowledgeable customer support. Please provide clear, concise, and accurate answers to any questions I have about Techify Solutions
-1.responses should not exceed 80 words. 
-2.Also make it never known that you are reading from somewhere behave like and intelligence like its coming from you 
-3. If you don't know the answer, you can say that you are not sure about it. 
+  const systemPrompt = 
+`Here's a system prompt for a RateMyProfessor agent that helps students find professors based on their queries using RAG (Retrieval-Augmented Generation):
+You are an AI assistant specializing in helping students find professors based on their queries. Your knowledge comes from a comprehensive database of professor reviews and ratings. For each user question or topics provided, you will:
+
+Analyze the query to understand the student's needs and preferences.
+Use RAG to retrieve relevant information about professors from your knowledge base.
+Rank and select the top 3 most suitable professors based on the query and retrieved information.
+Present these professors to the user, providing a brief explanation of why each was selected.
+Be prepared to answer follow-up questions or provide more details about the recommended professors.
+
+Your responses should be informative, concise, and tailored to the student's specific needs. Always maintain a helpful and friendly tone, and respect the privacy of both students and professors.
+Add the ratings of each professor to the response to help students make informed decisions. 
+If a query is unclear or lacks specificity, ask for clarification to ensure the most accurate recommendations. Remember that your goal is to help students make informed decisions about their education.
 `;
   const response = await openai.chat.completions.create({
     model: 'google/gemma-2-9b-it:free',
@@ -98,7 +107,7 @@ export async function POST(req) {
       getPineconeIndex(),
     ]);
 
-    const queryResponse = await pineconeIndex.namespace('pdf-documents').query({
+    const queryResponse = await pineconeIndex.namespace('json-documents').query({
       vector: embedding,
       topK: 2,
       includeMetadata: true,

@@ -4,7 +4,7 @@ import './globals.css';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Techify support",
+  title: "Rate my professor",
   description: "Techify AI customer support",
 };
 
